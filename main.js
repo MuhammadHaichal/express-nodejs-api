@@ -1,23 +1,22 @@
 import express from "express"
 import bodyParser from "body-parser"
-import allUserController from "./controller/allUserController.js"
-import addUserController from "./controller/addUsersController.js"
-
+import registerController from "./controller/registerController.js"
+import "dotenv/config"
 
 const app = express()
 const bodyJson = bodyParser.json()
-// const bodyUrlEncoded = bodyParser.urlencoded({extended: false})
+const port = process.env.port 
 
 
-app.get('/api/v1/users', allUserController)
-app.post('/api/v1/addUsers', bodyJson, addUserController )
 
+// ROUTE 
+app.post('/api/v1/users/register', bodyJson, registerController)
 
 // serer development setup
-app.listen(4000, (error) => {
-    if (error) throw error
+app.listen(port, (error) => {
+   if (error) throw error
 
-    console.log(
-        "server running at 4000"
-    )
+   console.log(
+      "server running at 4000"
+   )
 })

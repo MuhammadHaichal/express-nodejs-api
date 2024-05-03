@@ -1,0 +1,52 @@
+const { Sequelize, DataTypes } = require('sequelize');
+
+
+## connect db
+// Option 3: Passing parameters separately (other dialects)
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
+});
+
+## check if success or failed 
+try {
+  await sequelize.authenticate();
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
+
+## model
+
+const User = sequelize.define(
+  'User',
+  {
+    // Model attributes are defined here
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      // allowNull defaults to true
+    },
+  },
+  {
+    // Other model options go here
+  },
+);
+
+// `sequelize.define` also returns the model
+console.log(User === sequelize.models.User); // true
+
+
+## query
+// Create a new user
+const jane = await User.create({ firstName: 'Jane', lastName: 'Doe' });
+console.log("Jane's auto-generated ID:", jane.id);
+
+// Find all users
+const users = await User.findAll();
+console.log(users.every(user => user instanceof User)); // true
+console.log('All users:', JSON.stringify(users, null, 2));
+

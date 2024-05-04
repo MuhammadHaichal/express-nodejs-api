@@ -1,22 +1,25 @@
 import express from "express"
 import bodyParser from "body-parser"
-import registerController from "./controller/registerController.js"
 import "dotenv/config"
+import routes from "./routes.js"
 
 const app = express()
-const bodyJson = bodyParser.json()
+app.use(bodyParser.json())
+
+
 const port = process.env.port 
 
-
-
 // ROUTE 
-app.post('/api/v1/users/register', bodyJson, registerController)
+app.use(routes)
+
+
+
 
 // serer development setup
 app.listen(port, (error) => {
    if (error) throw error
 
    console.log(
-      "server running at 4000"
+      "Servers s running at http://localhost:" + port
    )
 })

@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs"
 import usersModels from '../models/usersModels.js'
+import ErrorAPI from "../services/api/errorAPI.js"
+import SuccessAPI from "../services/api/successAPI.js"
 
 const registerController = async (req, res) => {
    const { username, password } = req.body
@@ -9,12 +11,13 @@ const registerController = async (req, res) => {
    let checkPassword = password.length
 
    if (checkUsername == 0 | checkPassword == 0) {
-      return res.json({
-         statusCode: 400,
-         success: false,
-         messages: "Masukan Data Dengan Valid !"
-      })
-   } else {
+      
+      let infoAPIError = ErrorAPI(400, false, "Masukan Data Dengan Valid !")
+
+      return res.json(infoAPIError)
+   }
+
+   else {
 
       // hash password dari field password 
       const salt = bcrypt.genSaltSync(10)
@@ -24,24 +27,20 @@ const registerController = async (req, res) => {
 
          // kirim data ke database 
          await usersModels.create({
-            username: `'${username}'`,
-            password: `'${hashPassword}'`
+            username: `${username}`,
+            password: `${hashPassword}`
          })
 
-         res.json({
-            statusCode: 201,
-            success: true,
-            messages: "Berhasil Membuat User !"
+         const infoAPISuccess = SuccessAPI(201, true, "Berhasil Membuat User !", null)
+         res.json(infoAPISuccess)
 
-         })
+      }
 
-      } catch (error) {
-         console.log({ errorRegister: error})
-         res.json({
-            statusCode: 400,
-            success: false,
-            messages: "Gagal Membuat User, silakan coba lagi"
-         })
+      catch (errorApi) {
+         console.log({ errorRegister: errorApi})
+         let infoAPIError = ErrorAPI(400, false, "Gagal Membuat User, silakan coba lagi",)
+         res.status(400).json(infoAPIError)
+
       }
    }
 }

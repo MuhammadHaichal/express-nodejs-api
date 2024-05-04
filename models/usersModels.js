@@ -13,7 +13,7 @@ const usersModels = database.define(
       username: {
          type: DataTypes.STRING(35),
          allowNull: false,
-         primaryKey: true
+         unique: true
       },
       password: {
          type: DataTypes.TEXT,

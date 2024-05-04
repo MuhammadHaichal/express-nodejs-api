@@ -4,12 +4,12 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon main.js --env-file='.env'",
-        "prod": "nodemon main.js --env-file='.env.prod'",
+        "start:dev": "nodemon --env-file=.env.development main.js",
+        "start:prod": "nodemon --env-file=.env.production main.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "",
+    "author": "MasHaikal",
     "license": "ISC",
     "type": "module",
     "dependencies": {

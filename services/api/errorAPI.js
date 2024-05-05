@@ -1,9 +1,9 @@
-function ErrorAPI (statusCode, success, messages) {
+function ErrorAPI (statusCode, success, error) {
    
    let infoApi = {
       statusCode: statusCode,
       success: success,
-      messages: messages
+      errors: error,
    }
 
    return infoApi

@@ -1,25 +1,20 @@
 import express from "express"
 import bodyParser from "body-parser"
 import "dotenv/config"
-import routes from "./routes.js"
+import indexRoutes from './routes/index.js'
 
 const app = express()
 app.use(bodyParser.json())
 
-
-const port = process.env.port 
-
 // ROUTE 
-app.use(routes)
-
-
+app.use("/api/v1", indexRoutes)
 
 
 // serer development setup
-app.listen(port, (error) => {
+app.listen(process.env.port, (error) => {
    if (error) throw error
 
    console.log(
-      "Servers s running at http://localhost:" + port
+      "Servers s running at http://localhost:" + process.env.port
    )
 })

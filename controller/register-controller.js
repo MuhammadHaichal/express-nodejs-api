@@ -1,20 +1,23 @@
 import bcrypt from "bcryptjs"
-import usersModels from '../models/usersModels.js'
+import { validationResult } from "express-validator"
+
+import usersModels from '../models/users-models.js'
 import ErrorAPI from "../services/api/errorAPI.js"
 import SuccessAPI from "../services/api/successAPI.js"
 
+
+
+
 const registerController = async (req, res) => {
-   const { username, password } = req.body
+   const { username, password, email } = req.body
 
-   // cek jika field username / password kosong 
-   let checkUsername = username.length
-   let checkPassword = password.length
+   let validasi = validationResult(req)
 
-   if (checkUsername == 0 | checkPassword == 0) {
-      
-      let infoAPIError = ErrorAPI(400, false, "Masukan Data Dengan Valid !")
+   // jika users tidak menepati validasi 
+   if (!validasi.isEmpty()) {
 
-      return res.json(infoAPIError)
+      let infoAPIError = ErrorAPI(400, false, validasi.mapped())
+      return res.status(400).json(infoAPIError)
    }
 
    else {
@@ -27,8 +30,9 @@ const registerController = async (req, res) => {
 
          // kirim data ke database 
          await usersModels.create({
-            username: `${username}`,
-            password: `${hashPassword}`
+            username: username,
+            password: hashPassword,
+            email: email
          })
 
          const infoAPISuccess = SuccessAPI(201, true, "Berhasil Membuat User !", null)
@@ -37,10 +41,9 @@ const registerController = async (req, res) => {
       }
 
       catch (errorApi) {
-         console.log({ errorRegister: errorApi})
+         console.log({ errorRegister: errorApi })
          let infoAPIError = ErrorAPI(400, false, "Gagal Membuat User, silakan coba lagi",)
          res.status(400).json(infoAPIError)
-
       }
    }
 }

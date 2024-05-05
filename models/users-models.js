@@ -19,6 +19,11 @@ const usersModels = database.define(
          type: DataTypes.TEXT,
          allowNull: false
       },
+      email: {
+         type: DataTypes.STRING(50),
+         allowNull: false,
+         unique: true
+      }
    },
    {
       // Other model options go here
